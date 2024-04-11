@@ -14,9 +14,11 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public Customer create(Customer customer) {
-        //todo: Add necessary validations
         int id = CustomerSequencer.nextId();
         customer.setId(id);
+        if(customer == null) throw new IllegalArgumentException("Customer Data is null");
+        Optional<Customer> customerOptional =find(customer.getId());
+        if(customerOptional.isPresent()) throw new IllegalArgumentException("Customer's Id is duplicate");
         storage.add(customer);
         return customer;
     }
